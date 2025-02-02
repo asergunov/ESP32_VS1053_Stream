@@ -138,11 +138,11 @@ bool ESP32_VS1053_Stream::_canRedirect()
     return false;
 }
 
-bool ESP32_VS1053_Stream::startDecoder(const uint8_t CS, const uint8_t DCS, const uint8_t DREQ)
+bool ESP32_VS1053_Stream::startDecoder(const uint8_t CS, const uint8_t DCS, const uint8_t DREQ, SPIClass& SPI_)
 {
     if (_vs1053)
         return false;
-    _vs1053 = new VS1053(CS, DCS, DREQ);
+    _vs1053 = new VS1053(CS, DCS, DREQ, SPI_);
     if (!_vs1053)
         return false;
     _vs1053->begin();

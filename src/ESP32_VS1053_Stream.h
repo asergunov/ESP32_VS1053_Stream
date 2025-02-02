@@ -2,6 +2,7 @@
 #define __ESP32_VS1053_Stream__
 
 #include <Arduino.h>
+#include <SPI.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <HTTPClient.h>
@@ -30,6 +31,8 @@ extern void audio_showstation(const char *) __attribute__((weak));
 extern void audio_eof_stream(const char *) __attribute__((weak));
 extern void audio_showstreamtitle(const char *) __attribute__((weak));
 
+class SPIClass;
+
 class ESP32_VS1053_Stream
 {
 
@@ -37,7 +40,7 @@ public:
     ESP32_VS1053_Stream();
     ~ESP32_VS1053_Stream();
 
-    bool startDecoder(const uint8_t CS, const uint8_t DCS, const uint8_t DREQ);
+    bool startDecoder(const uint8_t CS, const uint8_t DCS, const uint8_t DREQ, SPIClass& SPI_ = SPI);
     bool isChipConnected();
 
     bool connecttohost(const char *url);
