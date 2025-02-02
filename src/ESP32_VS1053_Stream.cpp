@@ -7,7 +7,7 @@ ESP32_VS1053_Stream::ESP32_VS1053_Stream() : _vs1053(nullptr), _http(nullptr), _
 ESP32_VS1053_Stream::~ESP32_VS1053_Stream()
 {
     stopSong();
-    delete _vs1053;
+    delete _own_vs1053;
 }
 
 void ESP32_VS1053_Stream::_allocateRingbuffer()
@@ -142,10 +142,20 @@ bool ESP32_VS1053_Stream::startDecoder(const uint8_t CS, const uint8_t DCS, cons
 {
     if (_vs1053)
         return false;
-    _vs1053 = new VS1053(CS, DCS, DREQ);
+    _own_vs1053 = new VS1053(CS, DCS, DREQ);
+    if(!_own_vs1053)
+        return false;
+    _own_vs1053->begin();
+    return attachDecoder(_own_vs1053);
+}
+
+bool ESP32_VS1053_Stream::attachDecoder(VS1053* vs1053)
+{
+    if (_vs1053)
+        return false;
+    _vs1053 = vs1053;
     if (!_vs1053)
         return false;
-    _vs1053->begin();
     _vs1053->switchToMp3Mode();
     if (_vs1053->getChipVersion() == 4)
         _vs1053->loadDefaultVs1053Patches();

@@ -38,6 +38,7 @@ public:
     ~ESP32_VS1053_Stream();
 
     bool startDecoder(const uint8_t CS, const uint8_t DCS, const uint8_t DREQ);
+    bool attachDecoder(VS1053* vs1053);
     bool isChipConnected();
 
     bool connecttohost(const char *url);
@@ -70,7 +71,8 @@ public:
     void bufferStatus(size_t &used, size_t &capacity);
 
 private:
-    VS1053 *_vs1053;
+    VS1053 *_vs1053 = nullptr;
+    VS1053 *_own_vs1053 = nullptr;
     HTTPClient *_http;
     uint8_t _vs1053Buffer[VS1053_PLAYBUFFER_SIZE];
     uint8_t _localbuffer[VS1053_PSRAM_MAX_MOVE];
